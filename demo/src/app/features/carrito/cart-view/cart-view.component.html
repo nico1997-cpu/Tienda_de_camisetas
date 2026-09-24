@@ -1,0 +1,77 @@
+<h1 class="h3 mb-4">Tu carrito</h1>
+
+@if (cart.isEmpty()) {
+  <div class="text-center py-5">
+    <p class="fs-5">Tu carrito está vacío.</p>
+    <a routerLink="/catalogo" class="btn btn-primary">Ver catálogo</a>
+  </div>
+} @else {
+  <div class="row g-4">
+    <div class="col-12 col-lg-8">
+      <div class="table-responsive card shadow-sm">
+        <table class="table align-middle mb-0">
+          <caption class="visually-hidden">Camisetas en tu carrito</caption>
+          <thead>
+            <tr>
+              <th scope="col">Producto</th>
+              <th scope="col" class="text-end">Precio</th>
+              <th scope="col" class="text-center">Cantidad</th>
+              <th scope="col" class="text-end">Subtotal</th>
+              <th scope="col"><span class="visually-hidden">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of cart.items(); track item.camiseta.id) {
+              <tr>
+                <th scope="row" class="fw-normal">
+                  <span class="fw-semibold d-block">{{ item.camiseta.equipo }}</span>
+                  <small class="text-body-secondary">{{ item.camiseta.temporada }} · Talla {{ item.camiseta.talla }}</small>
+                </th>
+                <td class="text-end">{{ item.camiseta.precio | currency: moneda : 'symbol-narrow' : '1.0-0' }}</td>
+                <td class="text-center">
+                  <div class="btn-group btn-group-sm" role="group" [attr.aria-label]="'Cantidad de ' + item.camiseta.equipo">
+                    <button type="button" class="btn btn-outline-secondary" aria-label="Disminuir cantidad"
+                            [disabled]="item.cantidad <= 1" (click)="cart.decrementar(item.camiseta.id)">−</button>
+                    <span class="btn btn-outline-secondary disabled opacity-100 text-body" aria-live="polite">{{ item.cantidad }}</span>
+                    <button type="button" class="btn btn-outline-secondary" aria-label="Aumentar cantidad"
+                            [disabled]="item.cantidad >= item.camiseta.stock" (click)="cart.incrementar(item.camiseta.id)">+</button>
+                  </div>
+                  @if (item.cantidad >= item.camiseta.stock) {
+                    <small class="d-block text-body-secondary">Stock máximo</small>
+                  }
+                </td>
+                <td class="text-end fw-semibold">
+                  {{ item.camiseta.precio * item.cantidad | currency: moneda : 'symbol-narrow' : '1.0-0' }}
+                </td>
+                <td class="text-end">
+                  <button type="button" class="btn btn-sm btn-outline-danger"
+                          [attr.aria-label]="'Quitar ' + item.camiseta.equipo + ' del carrito'"
+                          (click)="cart.remover(item.camiseta.id)">Quitar</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <button type="button" class="btn btn-link text-danger mt-2 px-0" (click)="cart.vaciar()">Vaciar carrito</button>
+    </div>
+
+    <aside class="col-12 col-lg-4" aria-label="Resumen del pedido">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="h5">Resumen</h2>
+          <dl class="d-flex justify-content-between mb-1">
+            <dt class="fw-normal">Artículos</dt>
+            <dd class="mb-0">{{ cart.count() }}</dd>
+          </dl>
+          <dl class="d-flex justify-content-between fs-5 fw-semibold border-top pt-3">
+            <dt>Total</dt>
+            <dd class="mb-0">{{ cart.total() | currency: moneda : 'symbol-narrow' : '1.0-0' }}</dd>
+          </dl>
+          <a routerLink="/checkout" class="btn btn-primary w-100 mb-2">Continuar con la compra</a>
+          <a routerLink="/catalogo" class="btn btn-outline-secondary w-100">Seguir comprando</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+}

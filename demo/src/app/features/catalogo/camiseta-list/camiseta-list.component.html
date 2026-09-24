@@ -1,0 +1,63 @@
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+  <h1 class="h3 mb-0">Catálogo de camisetas</h1>
+  <div class="col-12 col-md-5 col-lg-4 p-0">
+    <label for="busqueda" class="visually-hidden">Buscar por equipo, liga, temporada o talla</label>
+    <input id="busqueda" type="search" class="form-control" placeholder="Buscar equipo, liga, temporada…"
+           [value]="busqueda()" (input)="alBuscar($event)" />
+  </div>
+</div>
+
+@if (cargando()) {
+  <div class="text-center py-5" role="status">
+    <div class="spinner-border text-success" aria-hidden="true"></div>
+    <p class="mt-3 mb-0">Cargando camisetas…</p>
+  </div>
+} @else if (error(); as mensaje) {
+  <div class="alert alert-danger d-flex justify-content-between align-items-center" role="alert">
+    <span>{{ mensaje }}</span>
+    <button type="button" class="btn btn-sm btn-outline-danger" (click)="cargar()">Reintentar</button>
+  </div>
+} @else if (filtradas().length === 0) {
+  <p class="text-center text-body-secondary py-5">
+    {{ camisetas().length === 0 ? 'Aún no hay camisetas disponibles.' : 'No hay camisetas que coincidan con tu búsqueda.' }}
+  </p>
+} @else {
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+    @for (c of filtradas(); track c.id) {
+      <div class="col">
+        <article class="card h-100 shadow-sm">
+          <div class="ratio ratio-1x1 bg-body-secondary">
+            @if (mostrarImagen(c)) {
+              <img [src]="c.imagenUrl" [alt]="'Camiseta ' + c.equipo + ' ' + c.temporada"
+                   class="card-img-top object-fit-cover" loading="lazy" (error)="marcarImagenRota(c.id)" />
+            } @else {
+              <div class="d-flex align-items-center justify-content-center display-3" aria-hidden="true">👕</div>
+            }
+          </div>
+
+          <div class="card-body d-flex flex-column">
+            <h2 class="h5 card-title mb-1">{{ c.equipo }}</h2>
+            <p class="text-body-secondary mb-2">{{ c.liga }}, temporada {{ c.temporada }}</p>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="badge text-bg-secondary">Talla {{ c.talla }}</span>
+              @if (c.stock === 0) {
+                <span class="badge text-bg-danger">Agotada</span>
+              } @else if (c.stock <= 5) {
+                <span class="badge text-bg-warning">Quedan {{ c.stock }}</span>
+              } @else {
+                <small class="text-body-secondary">{{ c.stock }} disponibles</small>
+              }
+            </div>
+
+            <p class="fs-5 fw-semibold mt-auto mb-3">{{ c.precio | currency: moneda : 'symbol-narrow' : '1.0-0' }}</p>
+
+            <button type="button" class="btn btn-primary w-100" [disabled]="!puedeAgregar(c)" (click)="agregar(c)">
+              {{ etiquetaBoton(c) }}
+            </button>
+          </div>
+        </article>
+      </div>
+    }
+  </div>
+}
