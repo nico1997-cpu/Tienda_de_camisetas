@@ -43,4 +43,14 @@ public class UsuarioService {
 
         return usuario;
     }
+
+    // email llega como lo dejó el JwtAuthFilter en request.getAttribute("usuarioEmail")
+    public Usuario obtenerAutenticado(String email) {
+        if (email == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Debes iniciar sesión");
+        }
+
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+    }
 }
