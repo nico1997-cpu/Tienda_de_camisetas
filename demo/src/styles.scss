@@ -1,0 +1,19 @@
+// Bootstrap 5 se carga desde angular.json ("styles"). Aquí solo el tema de la tienda.
+body {
+  background-color: #f6f7f4;
+}
+
+.btn-primary {
+  --bs-btn-bg: #14532d;
+  --bs-btn-border-color: #14532d;
+  --bs-btn-hover-bg: #0f3f22;
+  --bs-btn-hover-border-color: #0f3f22;
+  --bs-btn-active-bg: #0c331b;
+  --bs-btn-active-border-color: #0c331b;
+  --bs-btn-disabled-bg: #14532d;
+  --bs-btn-disabled-border-color: #14532d;
+}
+
+a { color: #14532d; }
+
+main:focus { outline: none; }

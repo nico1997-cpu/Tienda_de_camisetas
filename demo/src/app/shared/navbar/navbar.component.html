@@ -1,0 +1,60 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" aria-label="Navegación principal">
+  <div class="container">
+    <a class="navbar-brand fw-bold" routerLink="/catalogo" (click)="cerrarMenu()">Tienda de Camisetas</a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      aria-controls="menu-principal"
+      aria-label="Mostrar u ocultar el menú"
+      [attr.aria-expanded]="menuAbierto()"
+      (click)="alternarMenu()"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="menu-principal" [class.show]="menuAbierto()">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/catalogo" routerLinkActive="active" (click)="cerrarMenu()">Catálogo</a>
+        </li>
+        @if (auth.isLoggedIn()) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/mis-compras" routerLinkActive="active" (click)="cerrarMenu()">Mis compras</a>
+          </li>
+        }
+      </ul>
+
+      <ul class="navbar-nav align-items-lg-center gap-lg-2">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/carrito" routerLinkActive="active" (click)="cerrarMenu()">
+            Carrito
+            @if (cart.count() > 0) {
+              <span class="badge rounded-pill bg-success ms-1" aria-hidden="true">{{ cart.count() }}</span>
+              <span class="visually-hidden">{{ cart.count() }} artículos en el carrito</span>
+            }
+          </a>
+        </li>
+
+        @if (auth.isLoggedIn()) {
+          <li class="nav-item d-flex align-items-center gap-1">
+            <span class="navbar-text">Hola, {{ auth.usuario()?.nombre }}</span>
+            @if (auth.esAdmin()) {
+              <span class="badge bg-warning text-dark ms-1">Admin</span>
+            }
+          </li>
+          <li class="nav-item">
+            <button type="button" class="btn btn-outline-light btn-sm" (click)="cerrarSesion()">Cerrar sesión</button>
+          </li>
+        } @else {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login" routerLinkActive="active" (click)="cerrarMenu()">Iniciar sesión</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-light btn-sm" routerLink="/registro" (click)="cerrarMenu()">Registrarse</a>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,71 @@
+<section class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="h3 mb-4">Crear cuenta</h1>
+
+        @if (error(); as mensaje) {
+          <div class="alert alert-danger" role="alert">{{ mensaje }}</div>
+        }
+
+        <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input id="nombre" type="text" class="form-control" formControlName="nombre" autocomplete="name"
+                   [class.is-invalid]="invalido('nombre')" [attr.aria-describedby]="invalido('nombre') ? 'nombre-error' : null" />
+            @if (invalido('nombre')) {
+              <div id="nombre-error" class="invalid-feedback">
+                @if (form.controls.nombre.hasError('required')) { Ingresa tu nombre. } @else { Debe tener al menos 2 caracteres. }
+              </div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Correo electrónico</label>
+            <input id="email" type="email" class="form-control" formControlName="email" autocomplete="email"
+                   [class.is-invalid]="invalido('email')" [attr.aria-describedby]="invalido('email') ? 'email-error' : null" />
+            @if (invalido('email')) {
+              <div id="email-error" class="invalid-feedback">
+                @if (form.controls.email.hasError('required')) { Ingresa tu correo. } @else { Ingresa un correo válido. }
+              </div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label for="contrasena" class="form-label">Contraseña</label>
+            <input id="contrasena" type="password" class="form-control" formControlName="contrasena" autocomplete="new-password"
+                   aria-describedby="contrasena-ayuda" [class.is-invalid]="invalido('contrasena')" />
+            <div id="contrasena-ayuda" class="form-text">Mínimo 6 caracteres.</div>
+            @if (invalido('contrasena')) {
+              <div class="invalid-feedback d-block">
+                @if (form.controls.contrasena.hasError('required')) { Ingresa una contraseña. } @else { Debe tener al menos 6 caracteres. }
+              </div>
+            }
+          </div>
+
+          <div class="mb-4">
+            <label for="confirmar" class="form-label">Confirmar contraseña</label>
+            <input id="confirmar" type="password" class="form-control" formControlName="confirmar" autocomplete="new-password"
+                   [class.is-invalid]="invalido('confirmar') || noCoinciden"
+                   [attr.aria-describedby]="invalido('confirmar') || noCoinciden ? 'confirmar-error' : null" />
+            @if (invalido('confirmar') || noCoinciden) {
+              <div id="confirmar-error" class="invalid-feedback">
+                @if (form.controls.confirmar.hasError('required')) { Confirma tu contraseña. } @else { Las contraseñas no coinciden. }
+              </div>
+            }
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100" [disabled]="cargando()">
+            @if (cargando()) {
+              <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Creando cuenta…
+            } @else {
+              Registrarme
+            }
+          </button>
+        </form>
+
+        <p class="text-center mt-4 mb-0">¿Ya tienes cuenta? <a routerLink="/login" queryParamsHandling="preserve">Inicia sesión</a></p>
+      </div>
+    </div>
+  </div>
+</section>

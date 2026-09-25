@@ -1,0 +1,64 @@
+<section class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="h3 mb-4">Iniciar sesión</h1>
+
+        @if (sesionExpirada) {
+          <div class="alert alert-warning" role="alert">Tu sesión expiró. Inicia sesión de nuevo para continuar.</div>
+        }
+        @if (error(); as mensaje) {
+          <div class="alert alert-danger" role="alert">{{ mensaje }}</div>
+        }
+
+        <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+          <div class="mb-3">
+            <label for="email" class="form-label">Correo electrónico</label>
+            <input
+              id="email"
+              type="email"
+              class="form-control"
+              formControlName="email"
+              autocomplete="email"
+              [class.is-invalid]="invalido('email')"
+              [attr.aria-describedby]="invalido('email') ? 'email-error' : null"
+            />
+            @if (invalido('email')) {
+              <div id="email-error" class="invalid-feedback">
+                @if (form.controls.email.hasError('required')) { Ingresa tu correo. } @else { Ingresa un correo válido. }
+              </div>
+            }
+          </div>
+
+          <div class="mb-4">
+            <label for="contrasena" class="form-label">Contraseña</label>
+            <input
+              id="contrasena"
+              type="password"
+              class="form-control"
+              formControlName="contrasena"
+              autocomplete="current-password"
+              [class.is-invalid]="invalido('contrasena')"
+              [attr.aria-describedby]="invalido('contrasena') ? 'contrasena-error' : null"
+            />
+            @if (invalido('contrasena')) {
+              <div id="contrasena-error" class="invalid-feedback">Ingresa tu contraseña.</div>
+            }
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100" [disabled]="cargando()">
+            @if (cargando()) {
+              <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Ingresando…
+            } @else {
+              Ingresar
+            }
+          </button>
+        </form>
+
+        <p class="text-center mt-4 mb-0">
+          ¿No tienes cuenta? <a routerLink="/registro" queryParamsHandling="preserve">Regístrate</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
