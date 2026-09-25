@@ -24,4 +24,12 @@ export class CamisetaService {
   crear(camiseta: CamisetaPayload): Observable<Camiseta> {
     return this.http.post<Camiseta>(this.url, camiseta);
   }
+
+  actualizar(id: number, camiseta: CamisetaPayload): Observable<Camiseta> {
+    return this.http.put<Camiseta>(`${this.url}/${id}`, camiseta);
+  }
+
+  eliminar(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${id}`);
+  }
 }

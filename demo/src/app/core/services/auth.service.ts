@@ -10,6 +10,7 @@ const USER_KEY = 'auth_user';
 export interface SesionUsuario {
   nombre: string;
   email: string;
+  rol: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -23,6 +24,7 @@ export class AuthService {
   readonly token = this._token.asReadonly();
   readonly usuario = this._usuario.asReadonly();
   readonly isLoggedIn = computed(() => this._token() !== null);
+  readonly esAdmin = computed(() => this._usuario()?.rol?.toUpperCase() === 'ADMIN');
 
   login(datos: LoginRequest): Observable<AuthResponse> {
     return this.http
@@ -55,10 +57,15 @@ export class AuthService {
   }
 
   private guardarSesion(res: AuthResponse): void {
+    const usuario: SesionUsuario = {
+      nombre: res.nombre,
+      email: res.email,
+      rol: res.rol || 'USER',
+    };
     this.escribir(TOKEN_KEY, res.token);
-    this.escribir(USER_KEY, JSON.stringify({ nombre: res.nombre, email: res.email }));
+    this.escribir(USER_KEY, JSON.stringify(usuario));
     this._token.set(res.token);
-    this._usuario.set({ nombre: res.nombre, email: res.email });
+    this._usuario.set(usuario);
   }
 
   private estaExpirado(token: string): boolean {

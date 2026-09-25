@@ -26,14 +26,14 @@ public class UsuarioController {
     public LoginResponse registrar(@Valid @RequestBody RegistroRequest request) {
         Usuario usuario = usuarioService.registrar(request);
         String token = jwtService.generarToken(usuario.getEmail());
-        return new LoginResponse(token, usuario.getNombre(), usuario.getEmail());
+        return new LoginResponse(token, usuario.getNombre(), usuario.getEmail(), usuario.getRol());
     }
 
     @PostMapping("/login")
     public LoginResponse login(@Valid @RequestBody LoginRequest request) {
         Usuario usuario = usuarioService.login(request);
         String token = jwtService.generarToken(usuario.getEmail());
-        return new LoginResponse(token, usuario.getNombre(), usuario.getEmail());
+        return new LoginResponse(token, usuario.getNombre(), usuario.getEmail(), usuario.getRol());
     }
 
     @GetMapping("/perfil")
