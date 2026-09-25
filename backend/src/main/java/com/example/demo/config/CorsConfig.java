@@ -14,7 +14,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:4200", "AQUI_TU_ENLACE_DE_NETLIFY") // añade aquí tu dominio de producción
+                .allowedOrigins("http://localhost:4200","https://camisasjn.netlify.app") // añade aquí tu dominio de producción
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("Authorization", "Content-Type");
     }
