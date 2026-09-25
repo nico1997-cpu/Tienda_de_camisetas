@@ -27,7 +27,8 @@ export class NavbarComponent {
 
   protected cerrarSesion(): void {
     this.auth.logout();
+    this.cart.vaciar();
     this.cerrarMenu();
-    this.router.navigate(['/catalogo']);
+    this.router.navigate(['/login']);
   }
 }

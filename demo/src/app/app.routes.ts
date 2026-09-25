@@ -4,19 +4,7 @@ import { authGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'catalogo' },
 
-  // Públicas
-  {
-    path: 'catalogo',
-    title: 'Catálogo | Tienda de Camisetas',
-    loadComponent: () =>
-      import('./features/catalogo/camiseta-list/camiseta-list.component').then((m) => m.CamisetaListComponent),
-  },
-  {
-    path: 'carrito',
-    title: 'Carrito | Tienda de Camisetas',
-    loadComponent: () =>
-      import('./features/carrito/cart-view/cart-view.component').then((m) => m.CartViewComponent),
-  },
+  // Públicas (autenticación)
   {
     path: 'login',
     title: 'Iniciar sesión | Tienda de Camisetas',
@@ -30,6 +18,20 @@ export const routes: Routes = [
   },
 
   // Privadas (requieren sesión con JWT vigente)
+  {
+    path: 'catalogo',
+    title: 'Catálogo | Tienda de Camisetas',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/catalogo/camiseta-list/camiseta-list.component').then((m) => m.CamisetaListComponent),
+  },
+  {
+    path: 'carrito',
+    title: 'Carrito | Tienda de Camisetas',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/carrito/cart-view/cart-view.component').then((m) => m.CartViewComponent),
+  },
   {
     path: 'checkout',
     title: 'Confirmar compra | Tienda de Camisetas',
