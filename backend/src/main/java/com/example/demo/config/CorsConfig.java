@@ -13,9 +13,11 @@ public class CorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:4200","https://camisasjn.netlify.app") // añade aquí tu dominio de producción
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("Authorization", "Content-Type");
+        registry.addMapping("/**")
+                .allowedOrigins("https://camisasjn.netlify.app", "http://localhost:4200")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
+                .allowedHeaders("Authorization", "Content-Type", "X-Requested-With", "Accept")
+                .allowCredentials(true)
+                .maxAge(3600); // Para cachear la respuesta preflight por 1 hora
     }
 }
